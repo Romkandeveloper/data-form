@@ -8,6 +8,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
         <link rel="icon" type="image/png" href="http://thermoalliance.com.ua/site/img/favicon.png">
+        <script data-b24-form="auto/10/gedufh" data-skip-moving="true"> (function(w,d,u){ var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0); var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h); })(window,document,'https://sandi.com.ua/upload/crm/form/loader_10_gedufh.js'); </script>
         <style>
             *,
             *::before,
@@ -211,28 +212,32 @@
                             <a href = "https://www.ukragroexpo.com/"></a>
                         </div>
                 </header>
-                <form class = "form" id = "form">
+                <form class = "form" id = "form" action="https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill" method = "POST">
                     <div class = "hide"></div>
                     <div class = "form-send">
                       Дані відправлено <img src="https://img.icons8.com/fluency/48/000000/checkmark.png"/>
                     </div>
                     <main class = "form__content">
                         <ul class = "input-list">
+                            <input hidden name="id" value="10">
+                            <input hidden name="sec" value="gedufh">
+                            <input hidden name="lang" value="ua">
+                            <input hidden name="values" value='{"LEAD_TITLE":["Chaban"],"LEAD_COMPANY_TITLE":["teast"],"LEAD_COMMENTS":["tsd"],"LEAD_PHONE":["+380 (90) 999-00-99"],"LEAD_EMAIL":["123test@mail.ru"],"LEAD_UF_CRM_1632140137187":["wte"],"LEAD_UF_CRM_1632142653400":["93"]}'>
                             <li class = "form__item">
                                 <label for="contact-person">Контактна особа (ПІБ)</label> 
-                                <input type="text" id = "contact-person" required>
+                                <input type="text" value="Roman Chaban Test" id = "contact-person" required>
                             </li>
                             <li class = "form__item">
                                 <label for="organization-name">Назва організації</label>
-                                <input type="text" id = "organization-name" required>
+                                <input type="text" value="123" id = "organization-name" required>
                             </li>
                             <li class = "form__item">
                                 <label for="kind-activity">Сфера діяльності</label>
-                                <input type="text" id = "kind-activity" required>  
+                                <input type="text" value="1234" id = "kind-activity" required>  
                             </li>
                             <li class = "form__item">
                                 <label for="city">Місто</label>
-                                <input type="text" id = "city">
+                                <input type="text" value="12345" id = "city">
                             </li>
                             <li class = "form__item">
                                 <label for="phone-number">Контактний телефон</label>
@@ -306,9 +311,61 @@
                     $('#submit').attr('disabled', 'disabled');
                 }
             });
+
+            const data = {}
             
-            $('#form').on('submit', function(){
-                document.cookie = "send=true";
+            $('#form').on('submit', function(e){
+
+                e.preventDefault();
+                
+                var radio = $('[type = "radio"]');
+                var codeRadio = radio[0].checked ? "92" : radio[1].checked ? "93" : "94";
+
+                data['values'] = {
+                    "LEAD_TITLE":[$('#contact-person').val()],
+                    "LEAD_COMPANY_TITLE":[$('#organization-name').val()],
+                    "LEAD_COMMENTS":[$('#kind-activity').val()],
+                    "LEAD_PHONE":[$('#phone-number').val()],
+                    "LEAD_EMAIL":[$('#email').val()],
+                    "LEAD_UF_CRM_1632140137187":[$('#city').val()],
+                    "LEAD_UF_CRM_1632142653400":[codeRadio],
+                }
+
+
+                data['id'] = 10 //?
+                data['sec'] = 'gedufh' //?
+                data['lang'] = 'ua' //?
+                
+                console.log(data);
+                // document.cookie = "send=true";
+
+
+            // Пример отправки POST запроса:
+            async function postData(url = '', data = {}) {
+
+                // Default options are marked with *
+                const response = await fetch(url, {
+                    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                    mode: 'cors', // no-cors, *cors, same-origin
+                    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: 'same-origin', // include, *same-origin, omit
+                    headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    redirect: 'follow', // manual, *follow, error
+                    referrerPolicy: 'no-referrer', // no-referrer, *client
+                    body: JSON.stringify(data) // body data type must match "Content-Type" header
+                });
+                
+                return await response.json(); // parses JSON response into native JavaScript objects
+            }
+
+            postData('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data)
+            .then((data) => {
+                console.log(data); // JSON data parsed by `response.json()` call
+            });
+
             });
         </script>
     </body>
