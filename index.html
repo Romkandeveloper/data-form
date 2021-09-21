@@ -7,6 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" href="http://thermoalliance.com.ua/site/img/favicon.png">
         <style>
             *,
             *::before,
@@ -105,6 +106,7 @@
             }
             ul label{
                 font-size: 14px;
+                font-weight: bold;
                 display: block;
                 padding: 2px;
                 background-color: #fff;
@@ -152,6 +154,7 @@
                 padding-left: 10px;
             }
             .question{
+                font-weight: bold;
                 font-size: 14px;
                 margin-top: 15px;
             }
@@ -191,7 +194,7 @@
 
             }
             .radio span{
-                font-weight: bold;
+                
             }
 
 
@@ -233,7 +236,7 @@
                             </li>
                             <li class = "form__item">
                                 <label for="phone-number">Контактний телефон</label>
-                                <input type="text" id = "phone-number" required>
+                                <input type="text" id = "phone-number" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
                             </li>
                             <li class = "form__item">
                                 <label for="email">Електронна адреса</label>
