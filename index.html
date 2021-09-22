@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
         <link rel="icon" type="image/png" href="http://thermoalliance.com.ua/site/img/favicon.png">
-        <script data-b24-form="auto/10/gedufh" data-skip-moving="true"> (function(w,d,u){ var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0); var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h); })(window,document,'https://sandi.com.ua/upload/crm/form/loader_10_gedufh.js'); </script>
+        <!-- <script data-b24-form="auto/10/gedufh" data-skip-moving="true"> (function(w,d,u){ var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0); var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h); })(window,document,'https://sandi.com.ua/upload/crm/form/loader_10_gedufh.js'); </script>-->
         <style>
             *,
             *::before,
@@ -261,7 +261,7 @@
                                 <span>Ні</span>
                             </label>
                             
-                            <input type="radio" id="contactChoice3" name="contact" value="maybe" required> 
+                            <input type="radio" id="contactChoice3" name="contact" value="maybe" checked required> 
                             <label class = "radio" for = "contactChoice3">
                                 <span>Планую</span>
                             </label>
@@ -332,11 +332,13 @@
                 }
 
 
-                data['id'] = 10 //?
+                data.id = '19' //?
                 data['sec'] = 'gedufh' //?
                 data['lang'] = 'ua' //?
+                data.recaptcha = undefined;
+                data.trace = {};
+                data.entities = []
                 
-                console.log(data);
                 // document.cookie = "send=true";
 
 
@@ -371,6 +373,9 @@
             //       return response.json();
             //     });
 
+            var formData = new FormData(form)
+            formData.set('values',  JSON.stringify(data.values));
+
             async function postQ(uri, body, headers) {
                 const responce = await window.fetch(uri, {
                     method: "POST",
@@ -379,12 +384,12 @@
                     headers: Object.assign(headers || {}, {
                         'Origin': window.location.origin
                     }),
-                    body: body
+                    body: formData
                 });
                 return await responce.json();
             }
 
-            console.log(postQ('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data));
+            postQ('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data).then( response => console.log(response));
             });
         </script>
     </body>
