@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
         <link rel="icon" type="image/png" href="http://thermoalliance.com.ua/site/img/favicon.png">
-        <script data-b24-form="auto/10/gedufh" data-skip-moving="true"> (function(w,d,u){ var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0); var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h); })(window,document,'https://sandi.com.ua/upload/crm/form/loader_10_gedufh.js'); </script>
+        <!-- <script data-b24-form="auto/10/gedufh" data-skip-moving="true"> (function(w,d,u){ var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0); var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h); })(window,document,'https://sandi.com.ua/upload/crm/form/loader_10_gedufh.js'); </script>-->
         <style>
             *,
             *::before,
@@ -23,7 +23,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-
+            
+                padding: 50px 0;
                 min-height: 100vh;
             }
             .form-wrapper{
@@ -315,9 +316,7 @@
             const data = {}
             
             $('#form').on('submit', function(e){
-
-                e.preventDefault();
-                
+               
                 var radio = $('[type = "radio"]');
                 var codeRadio = radio[0].checked ? "92" : radio[1].checked ? "93" : "94";
 
@@ -332,59 +331,25 @@
                 }
 
 
-                data['id'] = 10 //?
+                data.id = '19' //?
                 data['sec'] = 'gedufh' //?
                 data['lang'] = 'ua' //?
+                data.recaptcha = undefined;
+                data.trace = {};
+                data.entities = []
                 
-                console.log(data);
-                // document.cookie = "send=true";
+                const form = document.querySelector("#form");
 
+                // var formData = new FormData(form);
+                // formData.set('values',  JSON.stringify(data.values));
 
-            // Пример отправки POST запроса:
-            // async function postData(url = '', data = {}) {
-
-            //     // Default options are marked with *
-            //     const response = await fetch(url, {
-            //         method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            //         mode: 'cors', // no-cors, *cors, same-origin
-            //         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                document.cookie = "send=true";
                 
-            //         headers: {
-            //             'Origin': window.location.origin,
-            //             // 'Content-Type': 'application/json'
-            //         // 'Content-Type': 'application/x-www-form-urlencoded',
-            //         },
-            //         // redirect: 'follow', // manual, *follow, error
-            //         // referrerPolicy: 'no-referrer', // no-referrer, *client
-            //         body: JSON.stringify(data) // body data type must match "Content-Type" header
-            //     });
-                
-            //     return await response.json(); // parses JSON response into native JavaScript objects
-            // }
-
-            // // postData('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data)
-            // // .then((data) => {
-            // //     console.log(data); // JSON data parsed by `response.json()` call
-            // // });
-
-            // window.b24form.App.post('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data).then(function (response) {
-            //       return response.json();
-            //     });
-
-            async function postQ(uri, body, headers) {
-                const responce = await window.fetch(uri, {
-                    method: "POST",
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    headers: Object.assign(headers || {}, {
-                        'Origin': window.location.origin
-                    }),
-                    body: JSON.stringify(body)
+                $('#form').submit(function( event ){ // задаем функцию при срабатывании события "submit" на элементе <form>
+	                event.preventDefault();
                 });
-                return await responce.json();
-            }
 
-            console.log(postQ('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data));
+                location.reload();
             });
         </script>
     </body>
