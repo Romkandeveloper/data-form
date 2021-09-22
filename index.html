@@ -379,7 +379,7 @@
                     headers: Object.assign(headers || {}, {
                         'Origin': window.location.origin
                     }),
-                    body: body
+                    body: JSON.stringify(body)
                 });
                 return await responce.json();
             }
