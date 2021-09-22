@@ -222,33 +222,33 @@
                         <ul class = "input-list">                            
                             <li class = "form__item">
                                 <label for="contact-person">Контактна особа (ПІБ)</label> 
-                                <input type="text" value="Roman Chaban Test" id = "contact-person" required>
+                                <input type="text" id = "contact-person" required>
                             </li>
                             <li class = "form__item">
                                 <label for="organization-name">Назва організації</label>
-                                <input type="text" value="123" id = "organization-name" required>
+                                <input type="text" id = "organization-name" required>
                             </li>
                             <li class = "form__item">
                                 <label for="kind-activity">Сфера діяльності</label>
-                                <input type="text" value="1234" id = "kind-activity" required>  
+                                <input type="text" id = "kind-activity" required>  
                             </li>
                             <li class = "form__item">
                                 <label for="city">Місто</label>
-                                <input type="text" value="12345" id = "city">
+                                <input type="text" id = "city">
                             </li>
                             <li class = "form__item">
                                 <label for="phone-number">Контактний телефон</label>
-                                <input type="text" id = "phone-number" value="+38 (033) 333-33-33" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
+                                <input type="text" id = "phone-number" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
                             </li>
                             <li class = "form__item">
                                 <label for="email">Електронна адреса</label>
-                                <input type="email" id = "email" value="roman.naumenko.94@gmail.com" required>
+                                <input type="email" id = "email" required>
                             </li>
                         </ul>
                         <p class = "question">Чи купуєте Ви обладнання для опалення та водопостачання в професійних цілях?</p>
                         <div class = "radio-container">
 
-                            <input type="radio" id="contactChoice1" name="contact" value="yes" checked required>    
+                            <input type="radio" id="contactChoice1" name="contact" value="yes" required>    
                             <label class = "radio" for = "contactChoice1">
                                 <span>Так</span>
                             </label>
@@ -282,23 +282,25 @@
                 return matches ? decodeURIComponent(matches[1]) : undefined;
             }
 
-          
-
             function checkSend () {
-                getCookie('send') ?  $('.form-send').css('display','flex') : $('.hide').hide();
+                if (getCookie('send')) {
+                    $('.form-send').css('display','flex');
+                    $('.hide').show();
+                }else  $('.hide').hide();
             }
+
             checkSend();
            
             const phoneNumber = document.getElementById('phone-number');
             const email = document.getElementById('email');
             const contactPerson = document.getElementById('contact-person');
 
-            if(false) {
-                var phoneMask = IMask(phoneNumber, {
-                    mask: '+{38} (\\000) 000-00-00',
-                    lazy: false,  
-                });
-            }
+          
+            var phoneMask = IMask(phoneNumber, {
+                mask: '+{38} (\\000) 000-00-00',
+                lazy: false,  
+            });
+            
 
             $('input').on('input', function(){
                 var name = $('#contact-person').val();
@@ -362,11 +364,12 @@
 
                     postQ('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', formData)
                         .then((response) => {
-                            if(response.error) {
-                                alert('Упс, что-то пошло не так!');
-                                return false;
-                            }
-                        
+                            
+                            // if(response.error) {
+                            //     alert('Упс, что-то пошло не так!');
+                            //     return false;
+                            // }
+                            
                             document.cookie = "send=true";
                             checkSend();
                         })
