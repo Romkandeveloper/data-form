@@ -219,11 +219,7 @@
                       Дані відправлено <img src="https://img.icons8.com/fluency/48/000000/checkmark.png"/>
                     </div>
                     <main class = "form__content">
-                        <ul class = "input-list">
-                            <input hidden name="id" value="10">
-                            <input hidden name="sec" value="gedufh">
-                            <input hidden name="lang" value="ua">
-                            <input hidden name="values" value='{"LEAD_TITLE":["Chaban"],"LEAD_COMPANY_TITLE":["teast"],"LEAD_COMMENTS":["tsd"],"LEAD_PHONE":["+380 (90) 999-00-99"],"LEAD_EMAIL":["123test@mail.ru"],"LEAD_UF_CRM_1632140137187":["wte"],"LEAD_UF_CRM_1632142653400":["93"]}'>
+                        <ul class = "input-list">                            
                             <li class = "form__item">
                                 <label for="contact-person">Контактна особа (ПІБ)</label> 
                                 <input type="text" value="Roman Chaban Test" id = "contact-person" required>
@@ -242,7 +238,7 @@
                             </li>
                             <li class = "form__item">
                                 <label for="phone-number">Контактний телефон</label>
-                                <input type="text" id = "phone-number" data-value="+38 (033) 333-33-33" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
+                                <input type="text" id = "phone-number" value="+38 (033) 333-33-33" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
                             </li>
                             <li class = "form__item">
                                 <label for="email">Електронна адреса</label>
@@ -252,7 +248,7 @@
                         <p class = "question">Чи купуєте Ви обладнання для опалення та водопостачання в професійних цілях?</p>
                         <div class = "radio-container">
 
-                            <input type="radio" id="contactChoice1" name="contact" value="yes" required>    
+                            <input type="radio" id="contactChoice1" name="contact" value="yes" checked required>    
                             <label class = "radio" for = "contactChoice1">
                                 <span>Так</span>
                             </label>
@@ -286,16 +282,23 @@
                 return matches ? decodeURIComponent(matches[1]) : undefined;
             }
 
-            getCookie('send') ?  $('.form-send').css('display','flex') : $('.hide').hide();
+          
+
+            function checkSend () {
+                getCookie('send') ?  $('.form-send').css('display','flex') : $('.hide').hide();
+            }
+            checkSend();
            
             const phoneNumber = document.getElementById('phone-number');
             const email = document.getElementById('email');
             const contactPerson = document.getElementById('contact-person');
 
-            var phoneMask = IMask(phoneNumber, {
-                mask: '+{38} (\\000) 000-00-00',
-                lazy: false,  
-            });
+            if(false) {
+                var phoneMask = IMask(phoneNumber, {
+                    mask: '+{38} (\\000) 000-00-00',
+                    lazy: false,  
+                });
+            }
 
             $('input').on('input', function(){
                 var name = $('#contact-person').val();
@@ -313,43 +316,64 @@
                 }
             });
 
-            const data = {}
-            
+           
             $('#form').on('submit', function(e){
+
+                e.preventDefault();
                
-                var radio = $('[type = "radio"]');
-                var codeRadio = radio[0].checked ? "92" : radio[1].checked ? "93" : "94";
-
-                data['values'] = {
-                    "LEAD_TITLE":[$('#contact-person').val()],
-                    "LEAD_COMPANY_TITLE":[$('#organization-name').val()],
-                    "LEAD_COMMENTS":[$('#kind-activity').val()],
-                    "LEAD_PHONE":[$('#phone-number').val()],
-                    "LEAD_EMAIL":[$('#email').val()],
-                    "LEAD_UF_CRM_1632140137187":[$('#city').val()],
-                    "LEAD_UF_CRM_1632142653400":[codeRadio],
-                }
-
-
-                data.id = '19' //?
-                data['sec'] = 'gedufh' //?
-                data['lang'] = 'ua' //?
-                data.recaptcha = undefined;
-                data.trace = {};
-                data.entities = []
-                
                 const form = document.querySelector("#form");
+                const formData = new FormData(form);
+                const radio = $('[type = "radio"]');
+                const codeRadio = radio[0].checked ? "92" : radio[1].checked ? "93" : "94";
+                const data = 
+                    {
+                        values: {
+                            "LEAD_TITLE":[$('#contact-person').val()],
+                            "LEAD_COMPANY_TITLE":[$('#organization-name').val()],
+                            "LEAD_COMMENTS":[$('#kind-activity').val()],
+                            "LEAD_PHONE":[$('#phone-number').val()],
+                            "LEAD_EMAIL":[$('#email').val()],
+                            "LEAD_UF_CRM_1632140137187":[$('#city').val()],
+                            "LEAD_UF_CRM_1632142653400":[codeRadio]
+                        },
+                    }
 
-                // var formData = new FormData(form);
-                // formData.set('values',  JSON.stringify(data.values));
+           
+                formData.append('id', 10);
+                formData.append('sec', 'gedufh');
+                formData.append('lang', 'ua');
+                formData.append('values',  JSON.stringify(data.values));
 
-                document.cookie = "send=true";
-                
-                $('#form').submit(function( event ){ // задаем функцию при срабатывании события "submit" на элементе <form>
-	                event.preventDefault();
-                });
+        
+                try {
 
-                location.reload();
+                    async function postQ(uri, body, headers) {
+                        const responce = await window.fetch(uri, {
+                            method: "POST",
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: Object.assign(headers || {}, {
+                                'Origin': window.location.origin
+                            }),
+                            body: body
+                        });
+                        return await responce.json();
+                    }
+
+                    postQ('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', formData)
+                        .then((response) => {
+                            if(response.error) {
+                                alert('Упс, что-то пошло не так!');
+                                return false;
+                            }
+                        
+                            document.cookie = "send=true";
+                            checkSend();
+                        })
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    alert('Упс, что-то пошло не так! ');
+                }
             });
         </script>
     </body>
