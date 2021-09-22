@@ -241,11 +241,11 @@
                             </li>
                             <li class = "form__item">
                                 <label for="phone-number">Контактний телефон</label>
-                                <input type="text" id = "phone-number" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
+                                <input type="text" id = "phone-number" data-value="+38 (033) 333-33-33" pattern="^\+38[\s]\(0\d{2}\)[\s]\d{3}[-]\d{2}[-]\d{2}$" required>
                             </li>
                             <li class = "form__item">
                                 <label for="email">Електронна адреса</label>
-                                <input type="email" id = "email" required>
+                                <input type="email" id = "email" value="roman.naumenko.94@gmail.com" required>
                             </li>
                         </ul>
                         <p class = "question">Чи купуєте Ви обладнання для опалення та водопостачання в професійних цілях?</p>
@@ -348,23 +348,28 @@
                     method: 'POST', // *GET, POST, PUT, DELETE, etc.
                     mode: 'cors', // no-cors, *cors, same-origin
                     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                    credentials: 'same-origin', // include, *same-origin, omit
+                
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Origin': window.location.origin,
+                        // 'Content-Type': 'application/json'
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    redirect: 'follow', // manual, *follow, error
-                    referrerPolicy: 'no-referrer', // no-referrer, *client
+                    // redirect: 'follow', // manual, *follow, error
+                    // referrerPolicy: 'no-referrer', // no-referrer, *client
                     body: JSON.stringify(data) // body data type must match "Content-Type" header
                 });
                 
                 return await response.json(); // parses JSON response into native JavaScript objects
             }
 
-            postData('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data)
-            .then((data) => {
-                console.log(data); // JSON data parsed by `response.json()` call
-            });
+            // postData('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data)
+            // .then((data) => {
+            //     console.log(data); // JSON data parsed by `response.json()` call
+            // });
+
+            window.b24form.App.post('https://sandi.com.ua/bitrix/services/main/ajax.php?action=crm.site.form.fill', data).then(function (response) {
+                  return response.json();
+                });
 
             });
         </script>
